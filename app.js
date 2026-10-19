@@ -1,0 +1,24 @@
+'use strict';
+const ALGORITHMS=[
+{id:'sune',name:'Sune',group:'OLL',hint:'Orientierung der letzten Ebene',moves:"R U R' U R U2 R'"},
+{id:'antisune',name:'Anti-Sune',group:'OLL',hint:'Orientierung der letzten Ebene',moves:"R U2 R' U' R U' R'"},
+{id:'tperm',name:'T-Perm',group:'PLL',hint:'Ecken und Kanten tauschen',moves:"R U R' U' R' F R2 U' R' U' R U R' F'"},
+{id:'ua',name:'Ua-Perm',group:'PLL',hint:'Drei Kanten zyklisch tauschen',moves:"R U' R U R U R U' R' U' R2"},
+{id:'ub',name:'Ub-Perm',group:'PLL',hint:'Umgekehrter Kantenzyklus',moves:"R2 U R U R' U' R' U' R' U R'"}];
+function inverse(moves){return moves.split(' ').reverse().map(m=>m.endsWith('2')?m:m.endsWith("'")?m.slice(0,-1):m+"'").join(' ')}
+function clean(raw){const out={};for(const a of ALGORITHMS){const v=raw?.[a.id];if(v&&Number.isSafeInteger(v.attempts)&&v.attempts>=0&&Number.isSafeInteger(v.success)&&v.success>=0&&v.success<=v.attempts&&[0,1,2].includes(v.grade))out[a.id]={attempts:v.attempts,success:v.success,grade:v.grade}}return out}
+if(typeof module!=='undefined')module.exports={ALGORITHMS,inverse,clean};
+if(typeof document!=='undefined'){
+const $=id=>document.getElementById(id),KEY='zwl-trainer-v1';let progress={};try{progress=clean(JSON.parse(localStorage.getItem(KEY)))}catch{}
+let current=ALGORITHMS[0],phase='ready',started=0,interval;
+const pool=()=>ALGORITHMS.filter(a=>$('group').value==='all'||a.group===$('group').value);
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(progress));return true}catch{$('feedback').textContent='Speichern nicht verfügbar. Exportiere deinen Fortschritt.';return false}}
+function stats(){let attempts=0,success=0,learned=0;for(const v of Object.values(progress)){attempts+=v.attempts;success+=v.success;if(v.grade===2)learned++}$('attempts').textContent=attempts;$('accuracy').textContent=attempts?Math.round(success/attempts*100)+' %':'—';$('learned').textContent=learned+' / 5';$('library').replaceChildren();for(const a of ALGORITHMS){const row=document.createElement('div');row.className='library-row';const text=document.createElement('div'),title=document.createElement('b'),detail=document.createElement('small');title.textContent=a.name;const v=progress[a.id];detail.textContent=a.group+' · '+(v?v.attempts+' Versuche · '+['Noch üben','Mit Hilfe','Sicher'][v.grade]:'Noch nicht geübt');text.append(title,detail);const b=document.createElement('button');b.textContent='Üben';b.setAttribute('aria-label',a.name+' üben');b.onclick=()=>{$('group').value='all';show(a);$('name').scrollIntoView({behavior:'smooth',block:'center'})};row.append(text,b);$('library').append(row)}}
+function show(a){clearInterval(interval);current=a;phase='ready';$('clock').textContent='00:00.0';$('name').textContent=a.name;$('hint').textContent=a.hint;$('category').textContent=a.group;$('position').textContent='Fall '+(ALGORITHMS.indexOf(a)+1)+' / 5';$('inverse').textContent=inverse(a.moves);$('algorithm').textContent=a.moves;$('solution').hidden=true;$('start').textContent='Übung starten';$('start').hidden=false;$('feedback').textContent='';document.querySelector('details').open=false}
+function next(){const choices=pool(),candidates=choices.length>1?choices.filter(a=>a.id!==current.id):choices;const weighted=candidates.flatMap(a=>Array(progress[a.id]?.grade===2?1:progress[a.id]?.grade===1?3:5).fill(a));show(weighted[Math.floor(Math.random()*weighted.length)])}
+function tick(){const t=Math.floor((performance.now()-started)/100);$('clock').textContent=String(Math.floor(t/600)).padStart(2,'0')+':'+String(Math.floor(t/10)%60).padStart(2,'0')+'.'+t%10}
+$('start').onclick=()=>{if(phase==='ready'){phase='running';started=performance.now();interval=setInterval(tick,100);$('start').textContent='Stoppen & Lösung anzeigen'}else if(phase==='running'){tick();clearInterval(interval);phase='revealed';$('solution').hidden=false;$('start').hidden=true}};
+document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{if(phase!=='revealed')return;const grade=Number(b.dataset.grade),old=progress[current.id]||{attempts:0,success:0};progress[current.id]={attempts:old.attempts+1,success:old.success+(grade===2?1:0),grade};const name=current.name;next();stats();if(persist())$('feedback').textContent=name+' gespeichert. Nächster Fall ist bereit.'});
+$('group').onchange=()=>show(pool()[0]);$('reset').onclick=()=>{if(confirm('Deinen lokal gespeicherten Fortschritt wirklich zurücksetzen?')){progress={};show(pool()[0]);persist();stats()}};
+$('export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),progress},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='zauberwuerfel-fortschritt.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};show(current);stats();}
+
