@@ -1,1 +1,94 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Kostenloser Zauberwürfel Algorithmus-Trainer für erste OLL- und PLL-Fälle."><title>Algorithmus Trainer · Zauberwürfel lösen</title><link rel="stylesheet" href="style.css"></head><body><header><a href="https://zauberwuerfelloesen.de/">▦ <b>Zauberwürfel lösen</b></a><a href="https://github.com/zauberwuerfelloesen/cube-algorithm-trainer">Quellcode ↗</a></header><main><small class="eyebrow">WENIGER NACHLESEN. MEHR DREHEN.</small><h1>Dein nächster Algorithmus<br><em>bleibt im Kopf.</em></h1><p class="intro">Fünf Bausteine für die letzte Ebene. Übe mit deinem echten Würfel und wiederhole gezielt.</p><section class="stats" aria-label="Fortschritt"><div><strong id="attempts">0</strong><span>Versuche</span></div><div><strong id="accuracy">—</strong><span>Sicher erinnert</span></div><div><strong id="learned">0 / 5</strong><span>Zuletzt sicher</span></div></section><div class="workspace"><section class="practice"><div class="toolbar"><label for="group">Übungsauswahl</label><select id="group"><option value="all">Alle Algorithmen</option><option value="OLL">OLL · Orientierung</option><option value="PLL">PLL · Positionierung</option></select></div><div class="card-top"><span class="tag" id="category"></span><span id="position"></span></div><h2 id="name"></h2><p id="hint"></p><p class="setup">Starte mit einem gelösten Würfel und führe die inverse Sequenz aus. Behalte für die Lösung dieselbe Orientierung.</p><details><summary>Vorbereitungssequenz anzeigen</summary><code id="inverse"></code></details><div id="clock" class="clock" aria-label="Übungszeit">00:00.0</div><button id="start" class="primary">Übung starten</button><div id="solution" hidden><small>LÖSUNGSSEQUENZ</small><code id="algorithm"></code><p>Wie sicher warst du?</p><div class="ratings"><button data-grade="0">Noch üben</button><button data-grade="1">Mit Hilfe</button><button data-grade="2">Sicher</button></div></div><p id="feedback" role="status" aria-live="polite"></p></section><aside><h2>So übst du</h2><ol><li>Bereite den Fall mit der inversen Sequenz vor.</li><li>Starte die Zeit und löse aus dem Gedächtnis.</li><li>Zeige die Lösung und bewerte deinen Versuch.</li></ol><p>Schwierige Fälle kommen häufiger dran. „Sicher“ ist deine Selbsteinschätzung; der Trainer prüft den Würfelzustand nicht.</p><h3>Notation</h3><p><b>R L U D F B</b> = rechte, linke, obere, untere, vordere, hintere Seite. Ohne Zusatz: 90° im Uhrzeigersinn, direkt auf die Seite gesehen. <b>'</b> = gegen den Uhrzeigersinn. <b>2</b> = 180°.</p><a href="https://zauberwuerfelloesen.de/algorithmen/">Mehr über Algorithmen ↗</a></aside></div><section class="library"><h2>Deine Sammlung <small>01 — 05</small></h2><div id="library"></div></section><footer><p>Dein Fortschritt bleibt auf diesem Gerät. Kein Konto, kein Tracking.</p><button id="export">Fortschritt exportieren</button><button id="reset">Fortschritt zurücksetzen</button><p><a href="https://zauberwuerfelloesen.de/">Anleitungen auf zauberwuerfelloesen.de ↗</a> · <a href="https://github.com/zauberwuerfelloesen/cube-algorithm-trainer/issues">Fehler melden</a></p></footer></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Alle 16 Algorithmen für 2-Look OLL und PLL üben: berechnete Würfeldiagramme, vier Lektionen und geplante Wiederholungen. Kostenlos und ohne Konto.">
+  <title>Algorithmus Trainer · Zauberwürfel lösen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a href="https://zauberwuerfelloesen.de/">▦ <b>Zauberwürfel lösen</b></a>
+  <a href="https://github.com/zauberwuerfelloesen/cube-algorithm-trainer">Quellcode ↗</a>
+</header>
+<main>
+  <small class="eyebrow">16 ALGORITHMEN. VIER KLARE SCHRITTE. <span class="version">v1.0</span></small>
+  <h1>Erkennen. Drehen.<br><em>Im Kopf behalten.</em></h1>
+  <p class="intro">Lerne die komplette letzte Ebene mit 2-Look OLL und PLL. Mit echten Würfelstellungen, vier Lektionen und Wiederholungen zum richtigen Zeitpunkt.</p>
+  <section class="stats" aria-label="Fortschritt">
+    <div><strong id="attempts">0</strong><span>Versuche</span></div>
+    <div><strong id="accuracy">—</strong><span>Sicher erinnert</span></div>
+    <div><strong id="learned">0 / 16</strong><span>Zuletzt sicher</span></div>
+    <div><strong id="due-count">16</strong><span>Neu oder fällig</span></div>
+  </section>
+  <div class="workspace">
+    <section class="practice" id="practice">
+      <div class="toolbar">
+        <div><label for="group">Lektion</label><select id="group">
+          <option value="all">Alle vier Lektionen</option>
+          <option value="edges">1 · OLL: Gelbes Kreuz</option>
+          <option value="corners">2 · OLL: Gelbe Ecken</option>
+          <option value="pcorners">3 · PLL: Ecken</option>
+          <option value="pedges">4 · PLL: Kanten</option>
+        </select></div>
+        <div><label for="mode">Übungsmodus</label><select id="mode">
+          <option value="due">Neu &amp; fällig</option><option value="free">Frei üben</option>
+        </select></div>
+      </div>
+      <p id="empty" hidden role="status"></p>
+      <div id="active-case">
+        <div class="card-top"><span class="tag" id="category"></span><span id="position"></span></div>
+        <h2 id="name"></h2>
+        <p id="hint"></p>
+        <figure class="case-figure">
+          <div id="case-diagram"></div>
+          <figcaption>Beispielstellung vor der Lösung · U = oben, F = vorne.<br>Gelb oben, Grün vorne. Gleiche Orientierung für Vorbereitung und Lösung.</figcaption>
+        </figure>
+        <p class="setup">Starte mit einem gelösten Würfel und führe die Vorbereitungssequenz aus. Das Netz zeigt genau diesen Fall. Andere Farben der nicht relevanten Teile sind bei derselben Fallklasse möglich.</p>
+        <details id="setup-details"><summary>Vorbereitungssequenz anzeigen</summary><code id="inverse"></code></details>
+        <p id="due-date" class="due-label"></p>
+        <div id="clock" class="clock" aria-label="Übungszeit">00:00.0</div>
+        <button id="start" class="primary">Übung starten</button>
+        <small class="shortcut">Leertaste startet und stoppt die Übung.</small>
+        <div id="solution" hidden>
+          <small>LÖSUNGSSEQUENZ</small><code id="algorithm"></code>
+          <p>Wie sicher warst du? Jede Bewertung plant eine Wiederholung.</p>
+          <div class="ratings"><button data-grade="0">Noch üben</button><button data-grade="1">Mit Hilfe</button><button data-grade="2">Sicher</button></div>
+        </div>
+      </div>
+      <p id="feedback" role="status" aria-live="polite"></p>
+    </section>
+    <aside>
+      <small class="eyebrow">DEIN LERNWEG</small>
+      <h2 id="lesson-title"></h2><p id="lesson-text"></p>
+      <h3>So übst du</h3>
+      <ol><li>Bereite den Fall am echten Würfel vor.</li><li>Starte die Zeit und löse aus dem Gedächtnis.</li><li>Zeige die Lösung und bewerte deinen Versuch.</li></ol>
+      <p>„Sicher“ ist deine Selbsteinschätzung. Der Trainer prüft deinen echten Würfel nicht.</p>
+      <details class="notation"><summary>Notation &amp; breite Züge</summary>
+        <p><b>R L U D F B</b>: rechte, linke, obere, untere, vordere und hintere Seite. Ohne Zusatz: 90° im Uhrzeigersinn, direkt auf diese Seite gesehen. <b>'</b>: gegen den Uhrzeigersinn. <b>2</b>: 180°.</p>
+        <p><b>r</b> und <b>f</b> drehen zwei Ebenen gemeinsam wie R bzw. F. <b>M</b> dreht die mittlere Ebene zwischen L und R in Richtung von L.</p>
+      </details>
+      <details><summary>Wie Wiederholungen funktionieren</summary><p>„Noch üben“: in 10 Minuten. „Mit Hilfe“: morgen. Aufeinanderfolgende sichere Versuche: nach 1, 3, 7, 14, 30 und danach jeweils 60 Tagen. In „Frei üben“ kannst du jederzeit trainieren.</p></details>
+      <p><a href="https://zauberwuerfelloesen.de/algorithmen/">Unsere Algorithmus-Anleitungen ↗</a></p>
+    </aside>
+  </div>
+  <section class="library"><h2>Deine vier Lektionen <small>10 OLL + 6 PLL</small></h2><div id="library"></div></section>
+  <footer>
+    <p>Dein Fortschritt bleibt auf diesem Gerät. Kein Konto, kein Tracking.</p>
+    <button id="export">Fortschritt exportieren</button>
+    <button id="import-toggle" aria-controls="import-panel">Fortschritt importieren</button>
+    <button id="reset">Fortschritt zurücksetzen</button>
+    <section id="import-panel" hidden>
+      <h3>Fortschritt importieren</h3>
+      <p>Exportdatei auswählen oder den JSON-Inhalt einfügen. Neuere lokale Einträge bleiben erhalten.</p>
+      <label for="import-file">JSON-Datei (max. 1 MB)</label><input type="file" id="import-file" accept=".json,application/json">
+      <label for="import-json">Export als JSON</label><textarea id="import-json" rows="6" spellcheck="false"></textarea>
+      <button id="import-confirm">Prüfen &amp; zusammenführen</button><p id="import-status" role="status" aria-live="polite"></p>
+    </section>
+    <p><a href="https://zauberwuerfelloesen.de/">Zauberwürfel lösen ↗</a> · <a href="https://github.com/zauberwuerfelloesen/cube-algorithm-trainer/issues">Fehler melden</a> · Algorithmusreferenz: <a href="https://jperm.net/3x3/cfop/ll">J Perm</a></p>
+  </footer>
+</main>
+<script src="cube.js"></script><script src="app.js"></script>
+</body>
+</html>
