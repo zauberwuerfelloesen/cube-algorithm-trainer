@@ -1,29 +1,48 @@
 # Cube Algorithm Trainer
 
-A dependency-free Rubik’s Cube algorithm trainer by [Zauberwürfel lösen](https://zauberwuerfelloesen.de/). The interface is in German.
+Learn **all 16 algorithms for two-look OLL and PLL**, in German, with calculated cube diagrams and scheduled reviews.
 
-## Features
-- Five starter algorithms: Sune, Anti-Sune, T-Perm, Ua-Perm and Ub-Perm.
-- Inverse setup sequences for a solved physical cube.
-- OLL/PLL filters, stopwatch and self-assessed recall.
-- Difficult cases appear more frequently; local progress and JSON export.
-- Responsive, no accounts or analytics, no build step.
+**[Open the live trainer →](https://zauberwuerfelloesen.github.io/cube-algorithm-trainer/)** · [Project website](https://zauberwuerfelloesen.de/) · [Changelog](CHANGELOG.md)
 
-This starter collection is not a complete OLL/PLL course. The trainer does not inspect your cube or verify the solution. Setup and solution require the same cube orientation.
+![Trainer preview with a calculated Sune case](preview.svg)
 
-## Run and develop
-Open `index.html` in a modern browser, or serve the directory with a static web server. HTTP hosting is recommended for persistent browser storage. Edit `index.html`, `style.css`, and `app.js`. Run `node test.js` for algorithm and progress checks.
+## Four lessons
+1. **Yellow cross** — line, L-shape and dot (3 cases).
+2. **Corner orientation** — Sune, Anti-Sune, H, Pi, U, T and L (7 cases).
+3. **Corner permutation** — T and Y (2 cases).
+4. **Edge permutation** — Ua, Ub, H and Z (4 cases).
 
-## Roadmap
-- More cases with verified cube-state illustrations.
-- Progress import and review dates.
-- English interface and keyboard shortcuts.
+Start after the first two layers are solved. Each lesson explains its prerequisite and goal. Every diagram is computed by applying the inverse of the displayed algorithm to a solved cube; it is a representative case, not every possible arrangement of the irrelevant pieces. U is yellow, F green and R orange. Compare the relevant stickers and use U adjustments when solving arbitrary last-layer cases.
 
-Issues and focused pull requests are welcome. Include reproduction steps, browser and expected behavior.
+## Practice and review
+- Stopwatch, Space shortcut, lesson filters and free-practice mode.
+- “Again” schedules 10 minutes; “with help” schedules one day.
+- Consecutive successful recalls schedule 1, 3, 7, 14, 30 and then 60 days.
+- Reviews follow the earliest due case; unseen cases are immediately available.
+- Ratings are self-assessed. The app cannot inspect your physical cube.
 
-## Learning resources
-[German cube guides](https://zauberwuerfelloesen.de/) · [Algorithms](https://zauberwuerfelloesen.de/algorithmen/)
+## Your progress
+No accounts, analytics, cookies, network services or dependencies. Progress is stored locally in your browser under the original storage key, so existing users retain their attempts.
+
+Export JSON to move progress to another device. Import accepts version 1 or 2 exports, rejects malformed data and files over 1 MB, and keeps the most recently reviewed record for each case. Importing merges records; it does not add attempt counters together. If timestamps match, the higher attempt count wins. Back up before resetting or clearing browser data. Review dates use your device clock and timezone.
+
+## Run and contribute
+Open `index.html`, or serve the repository with any static HTTP server. No build or installation is needed. HTTP hosting is recommended for predictable browser storage.
+
+```sh
+node test.js
+```
+
+Tests cover move inverses, wide/slice moves, all 16 setup sequences, F2L preservation, complete two-look orientation and permutation coverage, SVG sticker count, review scheduling, migration, input limits and conflict handling.
+
+Files: `cube.js` is the immutable sticker model and SVG renderer; `app.js` contains lessons, scheduling and the interface. Changes should include focused tests for algorithm or data behavior. File an issue with the case, browser, reproduction steps and expected behavior.
+
+## References
+Algorithm sequences were cross-checked against [J Perm’s OLL reference](https://jperm.net/algs/2look/oll) and [CubeSkills PLL algorithms](https://www.cubeskills.com/uploads/pdf/tutorials/pll-algorithms.pdf). Descriptions, software and calculated diagrams are independently written. Z includes its final U adjustment so the prepared example solves exactly.
+
+## More from Zauberwürfel lösen
+[German cube guides](https://zauberwuerfelloesen.de/) · [Algorithms](https://zauberwuerfelloesen.de/algorithmen/) · [Cube Pattern Explorer](https://github.com/zauberwuerfelloesen/cube-pattern-explorer)
 
 ## License
-MIT — see [LICENSE](LICENSE).
+[MIT](LICENSE).
 
